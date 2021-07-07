@@ -1318,6 +1318,7 @@ def nova_avaliacao():
     k3 = kn[0][2]
     print("k3 é:", k3)
 
+    mes_primario = 0
     # 4,3,2,1,2,2,2
     print("Mês anterior:", mes_anterior)  # GVj-1
     if mes_anterior == 0:
@@ -1347,6 +1348,8 @@ def nova_avaliacao():
         GVij2 = 0
         TPij2 = 0
         SIij2 = 0
+        # ou
+        mes_primario = 1
 
     try:
         GVij2 = avaliacao[0][7]
@@ -1362,6 +1365,7 @@ def nova_avaliacao():
         GVij2 = 0
         TPij2 = 0
         SIij2 = 0
+        mes_primario = 1
 
     # floatao = 2.151212112
     # print("Floatao é:%.2f" % (floatao))
@@ -1465,6 +1469,13 @@ def nova_avaliacao():
 
     ISIj = (((ISIj1 + ISIj2 + ISIj3) * RB)/(2**m))
     print("Indicador de confiança Segurança da Informação:", ISIj)
+    if mes_primario == 1:
+        IGVj = 0
+        ITPj = 0
+        ISIj = 0
+        print("É mês primário, valores dos indicadores zerados")
+    else:
+        print("Não é mês primário")
 
     cursor.execute("UPDATE avaliacao_csp SET IGVj=('%s'), ITPj=('%s'),ISIj=('%s') WHERE avaliador=('%s') and provedor=('%s') and mes=('%s') and ano=('%s')" % (
         float(IGVj), float(ITPj), float(ISIj), str(avaliador), str(provedor), int(mes), int(ano)))
