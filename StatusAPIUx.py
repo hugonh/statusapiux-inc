@@ -1263,12 +1263,15 @@ def nova_avaliacao():
 
     GVij = (q1+q2+q3+q4+q5+q6+q7)/7  # índice para o mês atual
     print("Indíce de Governança:", GVij)
+    GVij = format(GVij, '.2f')
 
     TPij = (q8+q9+q10+q11+q12+q13+q14)/7
     print("Indíce de Transparência:", TPij)
+    TPij = format(TPij, '.2f')
 
     SIij = (q15+q16+q17+q18+q19+q20+q21+q22+q23+q24)/10
     print("Indíce de Segurança da Informação:", SIij)
+    SIij = format(SIij, '.2f')
 
     # dados_lidos = cursor2.fetchone()
     # avaliacaoid_lido = dados_lidos
@@ -1525,6 +1528,10 @@ def nova_avaliacao():
 
     ISIj = (((ISIj1 + ISIj2 + ISIj3) * RB)/(2**m))
     print("Indicador de confiança Segurança da Informação:", ISIj)
+
+    IGVj = format(IGVj, '.2f')
+    ITPj = format(ITPj, '.2f')
+    ISIj = format(ISIj, '.2f')
     if mes_primario == 1:
         IGVj = 0
         ITPj = 0
@@ -1613,7 +1620,7 @@ def tela_login_sql():
         # StatusAPIUX.comboBox_2.clear()
         # StatusAPIUX.comboBox_3.clear()
         # StatusAPIUX.comboBox_4.clear()
-        StatusAPIUX.label_4.setText("Gestor:")
+        StatusAPIUX.label_4.setText("Manager:")
         # StatusAPIUX.label_2.setText(dados_lidos)
         # listar_dados()
         tela_login_dados()
@@ -4657,7 +4664,6 @@ if __name__ == "__main__":
 
     lista_avaliacao = uic.loadUi("ui/lista_avaliacao.ui")
 
-    tela_login_cadastro = uic.loadUi("ui/tela_login_cadastro.ui")
     tela_login = uic.loadUi("ui/tela_login.ui")
     tela_cadastro_avaliador = uic.loadUi("ui/tela_cadastro_avaliador.ui")
     tela_cadastro_provedor = uic.loadUi("ui/tela_cadastro_provedor.ui")
