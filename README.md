@@ -51,5 +51,5 @@ Início do desenvolvimento da aplicação com Pycharm, atualmente está sendo at
 
 ## Em funcionamento
 
-![image](https://user-images.githubusercontent.com/12383980/125108527-8848aa80-e0b8-11eb-8f59-f7a82aba3f63.png)
+![FTACSP](https://user-images.githubusercontent.com/12383980/125352338-83455e80-e337-11eb-98f0-4c6fd9efb6e1.png)
 
