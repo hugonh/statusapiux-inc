@@ -24,7 +24,11 @@ The app start to be developed with Pycharm, nowadays it is been updated and publ
 ![image](https://user-images.githubusercontent.com/12383980/125108527-8848aa80-e0b8-11eb-8f59-f7a82aba3f63.png)
 
 
+<<<<<<< HEAD
 #PT-BR
+=======
+# PT-BR
+>>>>>>> 03be8234a75cf4d2331b5ad3767ee616c899881a
 # Desenvolvimento
 
 Início do desenvolvimento da aplicação com Pycharm, atualmente está sendo atualizado e publicado com Visual Studio Code.
