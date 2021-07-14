@@ -35,6 +35,11 @@
 # traduzir o formulario de avaliacao
 # tirar a foto
 
+# Quando tiver incidentes não usar o RB
+# Colocar 3 casas
+# Remover ID(AUTO), Remover Evaluator (as colunas)
+# avaliadorusr pelo avaliador, cadastrado com nome completo
+# avaliador hugo
 # from _typeshed import NoneType
 from msilib.schema import RadioButton
 from PyQt5 import QtCore, QtGui, QtWidgets, uic, Qt
@@ -1611,7 +1616,12 @@ def tela_login_sql():
     username = tela_login.lineEdit.text()
     password = tela_login.lineEdit_2.text()
     StatusAPIUX.label_1.setText(str(username))
-    StatusAPIUX_avaliador.label_1.setText(str(username))
+    Comando_SQL = (
+        "select avaliador from avaliadores where avaliadorusr=('%s')" % (username,))
+    cursor.execute(Comando_SQL)
+    avaliador = cursor.fetchone()
+    avaliador = avaliador[0]
+    StatusAPIUX_avaliador.label_1.setText(str(avaliador))
     # tela_login_cadastro.label_7.setText(str(username))
     # if gestor=1
     # StatusAPIUX_avaliador.label_3.setText(d1)
@@ -1780,14 +1790,14 @@ def tela_login_dados_avaliador():
         StatusAPIUX.tableWidget.setSortingEnabled(False)
 
         comando_SQL = (
-            "SELECT id,avaliador,provedor,mes,ano,IGVj,ITPj,ISIj FROM avaliacao_csp where avaliador=('%s') order by provedor,ano,mes" % (avaliador,))
+            "SELECT provedor,mes,ano,IGVj,ITPj,ISIj FROM avaliacao_csp where avaliador=('%s') order by provedor,ano,mes" % (avaliador,))
         cursor.execute(comando_SQL)
         dados_listados = cursor.fetchall()
         print(dados_listados)
         StatusAPIUX_avaliador.tableWidget.setRowCount(len(dados_listados))
-        StatusAPIUX_avaliador.tableWidget.setColumnCount(8)
+        StatusAPIUX_avaliador.tableWidget.setColumnCount(6)
         for i in range(0, len(dados_listados)):
-            for j in range(0, 8):
+            for j in range(0, 6):
                 StatusAPIUX_avaliador.tableWidget.setItem(
                     i, j, QtWidgets.QTableWidgetItem(str(dados_listados[i][j])))
     # tela_login_cadastro.comboBox.
