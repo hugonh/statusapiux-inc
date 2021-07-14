@@ -204,33 +204,11 @@
      <bool>false</bool>
     </property>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>60</number>
+     <number>84</number>
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>35</number>
     </attribute>
-    <column>
-     <property name="text">
-      <string>ID (Auto)</string>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Evaluator</string>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-    </column>
     <column>
      <property name="text">
       <string>Provider</string>
