@@ -4577,7 +4577,7 @@ def cadastro_provedor_salvar():  # novo salvar 24/05
         print(provedor)
 
         QMessageBox.about(tela_cadastro_avaliador, "ALERTA",
-                          "Este provedor já foi criado.")
+                          "Este provedor já foi criado pra editar.")
         # QMessageBox.about(tela_cadastro_avaliador, "ALERTA",
         #                   "Este avaliador já foi criado, corrigir ou substituir:")
         # resp = QMessageBox.question(
@@ -4625,14 +4625,20 @@ def cadastro_inserir_provedor():
         print("Ativo=1 e desativado=1:", atividade)
         return
     try:
+        k1 = "0.50"
+        k2 = "0.25"
+        k3 = "0.25"
         provedor = [tela_cadastro_provedor.tableWidget_2.item(
             row, 0).text() for row in range(tela_cadastro_provedor.tableWidget_2.rowCount())]
         atividade = [tela_cadastro_provedor.tableWidget_2.item(
             row, 1).text() for row in range(tela_cadastro_provedor.tableWidget_2.rowCount())]
         cursor = banco.cursor()
-        cursor.execute("insert into provedores(provedor,atividade)" "VALUES('%s','%s')" %
+        cursor.execute("insert into provedores(provedor,atividade,k1,k2,k3)" "VALUES('%s','%s','%s','%s','%s')" %
                        (''.join(provedor),
-                        ''.join(atividade)))
+                        ''.join(atividade),
+                        ''.join(k1),
+                        ''.join(k2),
+                        ''.join(k3)))
 
         print("dados inseridos com sucesso! Provedor Criado!")
         QMessageBox.about(tela_cadastro_provedor, "ALERTA",
