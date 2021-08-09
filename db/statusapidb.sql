@@ -77,7 +77,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 delete from avaliadores where avaliador = "";
 delete from provedores where provedor ="";
 drop table avaliadores;
-select * from avaliadores;
+	select * from avaliadores;
 select * from provedores;
 select * from tempos;
 select * from avaliacao_csp;
@@ -91,9 +91,10 @@ create table avaliadores (
 avaliadorid INT NOT NULL AUTO_INCREMENT,
 avaliador VARCHAR (50) NOT NULL UNIQUE,
 avaliadorusr VARCHAR (50) NOT NULL UNIQUE ,
-avaliadorpw VARCHAR (50) NOT NULL,
+avaliadorpw VARCHAR (150) NOT NULL,
 atividade INT NOT NULL,
 gestor INT NOT NULL,
+salt VARCHAR(10),
 PRIMARY KEY (avaliador),
 unique Key(avaliadorid)
 );
@@ -121,6 +122,7 @@ drop table provedores;
 select * from tempos;
 select * from avaliadores;
 select * from provedores;
+delete from provedores where provedorid>2;
 select * from avaliacao_csp;
 select * from avaliacao_csp where provedor="AWS" and mes>=1 and mes<=12 ;
 
@@ -129,7 +131,7 @@ select * from avaliacao_csp where avaliador="joaquim" and provedor="aws" and mes
 select * from avaliacao_csp where avaliador="joaquim" and provedor="aws" and mes<=03 and ano=2021 UNION select * from avaliacao_csp where avaliador = "joaquim" and provedor = "aws" and mes>03 and ano=2020 order by ano,mes;
 select * from avaliacao_csp where avaliador="joaquim" and provedor="aws" and mes<=12 and ano=2020 UNION select * from avaliacao_csp where avaliador = "joaquim" and provedor = "aws" and mes>=12 and ano=2019 order by ano,mes;
 delete from avaliacao_csp where avaliador="joaquim" and provedor ="aws" and mes=06 and ano=2021;
-delete from avaliacao_csp where avaliador="joaquim" and provedor ="aws" and mes=01 and ano=2020;
+delete from avaliacao_csp where avaliador="hugo biller" and provedor ="locaweb" and mes=04 and ano=2021;
 select * from avaliacao_csp where avaliador="joaquim" order by provedor, ano,mes;
 INSERT INTO avaliadores(avaliador) SELECT avaliador FROM avaliadores WHERE NOT EXISTS(SELECT avaliador FROM avaliadores WHERE avaliador=avaliador) LIMIT 1;
 insert ignore into avaliadores(avaliador) values("Hugo");
@@ -144,6 +146,7 @@ delete from avaliacao_csp where avaliador="joaquim";
 INSERT INTO avaliacao_csp (avaliadorid, provedorid,tempoid,data_avaliacao, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24) VALUES (1, 2, 1,"2021-05-11", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23","24");
 INSERT INTO csp (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24) VALUES ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23","24");
 insert into avaliadores (avaliador, avaliadorusr, avaliadorpw, gestor,atividade) values ("Administrador", "admin", "123",1,1) ;
+insert into avaliadores (avaliador, avaliadorusr, avaliadorpw, gestor,atividade,salt) values ("Administrador", "admin", "a84d1fd28ac5a228030f1c771fddd46d0dfb43c1c110664cfd9796302f4f9700b83701efa425ea6e69fb2589e1f54465e19d33925ea7458ab5f9cf0ce1c6dc8c",1,1,"eennktMTHP") ;
 insert into avaliadores (avaliador, avaliadorusr, avaliadorpw, gestor,atividade) values ("Joaquim", "joaquim", "123",0,1) ;
 insert into avaliadores (avaliador, avaliadorusr, avaliadorpw, gestor,atividade) values ("Joaquina", "joaquina", "123",0,0) ;
 insert into provedores (provedor,atividade,k1,k2,k3) values ("Locaweb",1,0.5,0.25,0.25);
@@ -355,6 +358,7 @@ show engine innodb status;
 select avaliador from avaliadores where avaliadorusr="vamp?";
 
 update avaliadores set avaliador="maria", avaliadorusr="maria", avaliadorpw=123, atividade=1, gestor=0 where avaliadorid=3;
+update avaliadores set avaliador="Hugo Biller", avaliadorusr="hugo", avaliadorpw=123, atividade=1, gestor=0 where avaliadorid=2;
 update avaliadores set avaliador=maria where avaliadorid=3;
 update avaliadores set gestor=1 where avaliadorid=16;
 select * from avaliadores;
