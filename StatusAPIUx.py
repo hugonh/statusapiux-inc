@@ -51,6 +51,14 @@
 # RB no banco de dados
 # Hash na senha no banco de dados, não só na criação do novo usuário
 
+# mostrar_graficos estou tentando fazer com numpy
+# ao inves de selecionar com box o provedor pra mostrar o grafico, conforme selecionado na tabela ao apertar o mostrar gráficos, pegar o provedor a partir da seleção
+# mostrar só um provedor no mostrar gráficos
+# colocar pra não ter nenhuma linha selecionada por padrão ou deixar bem azulado, mesmo que ao iniciar o programa não tenha selecionado nenhuma
+# manualmente
+# o ftacsp do prototype, era ainda os 2 gráficos na tela principal, que fazia o plot atraves do tela_login_dados_avaliador
+# agora está sendo feito através do mostrar_graficos, fazendo com que apareça unicamente o gráfico do provedor, conforme a linha daquele é escolhida
+
 import string
 import random
 import uuid
@@ -73,6 +81,9 @@ from msilib.schema import RadioButton
 # print(dir(QGradient))
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
+from pyqtgraph.functions import makeRGBA
+from pyqtgraph.widgets.FeedbackButton import FeedbackButton
+from pyqtgraph.widgets.ValueLabel import ValueLabel
 
 
 numero_id = 0
@@ -1902,7 +1913,7 @@ def tela_login_dados():
     StatusAPIUX.show()
 
 
-def tela_login_dados_avaliador():
+def tela_login_dados_avaliador_bkp():
     username = tela_login.lineEdit.text()
     cursor = banco.cursor()
     Comando_SQL = (
@@ -1931,11 +1942,267 @@ def tela_login_dados_avaliador():
         y = []
         z = []
         a = []
-        StatusAPIUX_avaliador.graphicsView.setTitle("Assessment")
-        StatusAPIUX_avaliador.graphicsView.setLabel(
-            'bottom', 'Month')
-        StatusAPIUX_avaliador.graphicsView.setLabel(
-            'left', 'Indicators')
+        x2 = []
+        y2 = []
+        z2 = []
+        a2 = []
+        contador = 0
+        contador2 = 0
+        p = 0
+        for i in range(0, len(dados_listados)):
+            for j in range(0, 6):
+                StatusAPIUX_avaliador.tableWidget.setItem(
+                    i, j, QtWidgets.QTableWidgetItem(str(dados_listados[i][j])))
+
+            provedor = dados_listados[0][0]
+            provedor2 = dados_listados[i][0]
+            mes = dados_listados[i][1]
+            ano = dados_listados[i][2]
+            IGVj = dados_listados[i][3]
+            ITPj = dados_listados[i][4]
+            ISIj = dados_listados[i][5]
+            print("i é", i)
+            print("provedor da tabela:", provedor)
+            print("mês da tabela:", mes)
+            print("ano da tabela:", ano)
+            print("IGVj da tabela:", IGVj)
+            print("ITPj da tabela:", ITPj)
+            print("ISIj da tabela:", ISIj)
+
+            # lembrar que cada iteração(i) ele conta um a mais em todos campos
+            if provedor2 == provedor:
+                # para nao ficar aumentando as legendas toda vez do plot
+                #provedor = dados_listados[i][0]
+                tela_graficos.graphicsView.setTitle(provedor)
+                tela_graficos.graphicsView.setLabel(
+                    'bottom', 'Month', units='m')
+                tela_graficos.graphicsView.setLabel(
+                    'left', 'Indicators')
+                tela_graficos.graphicsView_2.setTitle(
+                    "Waiting new provider")
+                tela_graficos.graphicsView_2.setLabel(
+                    'bottom', 'Month', units='m')
+                tela_graficos.graphicsView_2.setLabel(
+                    'left', 'Indicators')
+                #mes = [1, 2, 3, 4]
+                #IGVj = [2.2, 3.1, 3.5, 2.1]
+                xx = mes
+                yy = IGVj
+                zz = ITPj
+                aa = ISIj
+                #x = mes
+
+                x.append(xx)
+
+                y.append(yy)
+
+                z.append(zz)
+
+                a.append(aa)
+
+                #y = IGVj
+                #x = x[i]
+                #y = y[i]
+                #n = IGVj
+                #y = y[k]
+                # y.append(n)
+                #x = float(xx)
+                #y = float(y)
+                print("X é:", x)
+                print("Y é:", y)
+                print("Z é:", z)
+                print("A é:", a)
+
+
+#                 x = np.arange(1000)
+#                 y = np.random.normal(size=(3, 1000))
+
+                #print("N é: ", n)
+                # StatusAPIUX_avaliador.graphicsView.addLegend(offset=-90)
+                tela_graficos.graphicsView.addLegend(offset=90)
+                tela_graficos.graphicsView.addLegend()
+                tela_graficos.graphicsView.addLegend()
+                if contador == 0:
+                    # months = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    #           'Jul', 'Ago', 'Sep', 'Out', 'Nov', 'Dec')
+
+                    # StatusAPIUX_avaliador.graphicsView.items()
+
+                    # else:
+                    #     print("Mês não encontrado")
+                    # if x == 1:
+                    #     xx = "Jan"
+                    # elif xx == 2:
+                    #     xx = "Fev"
+                    # elif xx == 3:
+                    #     xx = "Mar"
+                    # elif xx == 4:
+                    #     xx = "April"
+                    # elif xx == 5:
+                    #     xx = "May"
+                    # elif xx == 6:
+                    #     xx = "Jun"
+                    # elif xx == 7:
+                    #     xx = "Jul"
+                    # elif xx == 8:
+                    #     xx = "Ago"
+                    # elif xx == 9:
+                    #     xx = "Sept"
+                    # elif xx == 10:
+                    #     xx = "Oct"
+                    # elif xx == 11:
+                    #     xx = "Nov"
+                    # elif xx == 12:
+                    #     xx = "Dec"
+                    # else:
+                    #     print("Mês não encontrado")
+                    pen = pg.mkPen(color=(255, 0, 0))
+                    tela_graficos.graphicsView.plot(
+                        x, y, name="IGVj", pen=pen, symbol='+')
+
+                    pen2 = pg.mkPen(color=(0, 255, 0))
+                    tela_graficos.graphicsView.plot(
+                        x, z, name="ITPj", pen=pen2, symbol='o')
+
+                    pen3 = pg.mkPen(color=(0, 0, 255))
+                    tela_graficos.graphicsView.plot(
+                        x, a, name="ISIj", pen=pen3, symbol='x')
+
+                else:
+                    pen = pg.mkPen(color=(255, 0, 0))
+                    tela_graficos.graphicsView.plot(
+                        x, y, pen=pen, symbol='+')
+
+                    pen2 = pg.mkPen(color=(0, 255, 0))
+                    tela_graficos.graphicsView.plot(
+                        x, z, pen=pen2, symbol='o')
+
+                    pen3 = pg.mkPen(color=(0, 0, 255))
+                    tela_graficos.graphicsView.plot(
+                        x, a, pen=pen3, symbol='x')
+                contador = contador+1
+                p = p+1
+            else:  # quando muda de provedor pra não continuar o append mesmo de provedores diferentes na lista dos indicadores, zerar a lista
+                provedor = dados_listados[i][0]
+                mes = dados_listados[i][1]
+                ano = dados_listados[i][2]
+                IGVj = dados_listados[i][3]
+                ITPj = dados_listados[i][4]
+                ISIj = dados_listados[i][5]
+                print("i do else é", i)
+                print("provedor da tabela 2:", provedor)
+                print("mês da tabela 2:", mes)
+                print("ano da tabela 2:", ano)
+                print("IGVj da tabela 2:", IGVj)
+                print("ITPj da tabela 2:", ITPj)
+                print("ISIj da tabela 2:", ISIj)
+
+                tela_graficos.graphicsView_2.setTitle(provedor)
+                tela_graficos.graphicsView_2.setLabel(
+                    'bottom', 'Month', units='m')
+                tela_graficos.graphicsView_2.setLabel(
+                    'left', 'Indicators')
+                #mes = [1, 2, 3, 4]
+                #IGVj = [2.2, 3.1, 3.5, 2.1]
+                xx2 = mes
+                yy2 = IGVj
+                zz2 = ITPj
+                aa2 = ISIj
+                #x = mes
+
+                x2.append(xx2)
+
+                y2.append(yy2)
+
+                z2.append(zz2)
+
+                a2.append(aa2)
+
+                #y = IGVj
+                #x = x[i]
+                #y = y[i]
+                #n = IGVj
+                #y = y[k]
+                # y.append(n)
+                #x = float(xx)
+                #y = float(y)
+                print("X é:", x2)
+                print("Y é:", y2)
+                print("Z é:", z2)
+                print("A é:", a2)
+                #print("N é: ", n)
+                # StatusAPIUX_avaliador.graphicsView_2.addLegend(offset=-90)
+                tela_graficos.graphicsView_2.addLegend(offset=90)
+                tela_graficos.graphicsView_2.addLegend()
+                tela_graficos.graphicsView_2.addLegend()
+                # StatusAPIUX_avaliador.graphicsView_2.items()
+                if contador2 == 0:
+                    pen = pg.mkPen(color=(255, 0, 0))
+                    tela_graficos.graphicsView_2.plot(
+                        x2, y2, name="IGVj", pen=pen, symbol='+', )
+
+                    pen2 = pg.mkPen(color=(0, 255, 0))
+                    tela_graficos.graphicsView_2.plot(
+                        x2, z2, name="ITPj", pen=pen2, symbol='o')
+
+                    pen3 = pg.mkPen(color=(0, 0, 255))
+                    tela_graficos.graphicsView_2.plot(
+                        x2, a2, name="ISIj", pen=pen3, symbol='x')
+
+                else:
+                    pen = pg.mkPen(color=(255, 0, 0))
+                    tela_graficos.graphicsView_2.plot(
+                        x2, y2, pen=pen, symbol='+', )
+
+                    pen2 = pg.mkPen(color=(0, 255, 0))
+                    tela_graficos.graphicsView_2.plot(
+                        x2, z2, pen=pen2, symbol='o')
+
+                    pen3 = pg.mkPen(color=(0, 0, 255))
+                    tela_graficos.graphicsView_2.plot(
+                        x2, a2, pen=pen3, symbol='x')
+                contador2 = contador2+1
+
+        banco.commit()
+
+        StatusAPIUX_avaliador.label_4.setText("Evaluator:")
+        StatusAPIUX_avaliador.show()
+
+        tela_graficos.graphicsView.showGrid(x=True, y=True)
+        tela_graficos.graphicsView.setXRange(0, 4, padding=0)
+        tela_graficos.graphicsView_2.showGrid(x=True, y=True)
+        tela_graficos.graphicsView_2.setXRange(0, 4, padding=0)
+        #StatusAPIUX_avaliador.graphicsView.setYRange(0, 4, padding=0)
+
+       # StatusAPIUX_avaliador.graphicsView.plot(x, y, pen=(i, 3))
+
+
+def tela_login_dados_avaliador():
+    username = tela_login.lineEdit.text()
+    cursor = banco.cursor()
+    Comando_SQL = (
+        "select avaliador from avaliadores where avaliadorusr=('%s')" % (username,))
+    # Comando_SQL = (
+    # 17/05 "select avaliador, avaliadorid from avaliadores where avaliadorusr=('%s')" % (username,))
+    cursor.execute(Comando_SQL)
+    dados_lidos = cursor.fetchall()
+    for s in range(len(dados_lidos,)):
+        # if dados_lidos[s][0] != dados_lidos[s][0]:
+        print(dados_lidos[s])
+
+        avaliador = dados_lidos[s][0]
+        # 17/05 avaliadorid = dados_lidos[s][1]
+        formulario_avaliacao.label.setText(avaliador)
+        StatusAPIUX.tableWidget.setSortingEnabled(False)
+
+        comando_SQL = (
+            "SELECT provedor,mes,ano,IGVj,ITPj,ISIj FROM avaliacao_csp where avaliador=('%s') order by provedor,ano,mes" % (avaliador,))
+        cursor.execute(comando_SQL)
+        dados_listados = cursor.fetchall()
+        print("Dados listados que são apresentados na tabela:", dados_listados)
+        StatusAPIUX_avaliador.tableWidget.setRowCount(len(dados_listados))
+        StatusAPIUX_avaliador.tableWidget.setColumnCount(6)
+
         for i in range(0, len(dados_listados)):
             for j in range(0, 6):
                 StatusAPIUX_avaliador.tableWidget.setItem(
@@ -1954,80 +2221,201 @@ def tela_login_dados_avaliador():
             print("IGVj da tabela:", IGVj)
             print("ITPj da tabela:", ITPj)
             print("ISIj da tabela:", ISIj)
-            #mes = [1, 2, 3, 4]
-            #IGVj = [2.2, 3.1, 3.5, 2.1]
-            xx = mes
-            yy = IGVj
-            zz = ITPj
-            aa = ISIj
-            #x = mes
 
-            x.append(xx)
-
-            y.append(yy)
-
-            z.append(zz)
-
-            a.append(aa)
-
-            #y = IGVj
-            #x = x[i]
-            #y = y[i]
-            #n = IGVj
-            #y = y[k]
-            # y.append(n)
-            #x = float(xx)
-            #y = float(y)
-            print("X é:", x)
-            print("Y é:", y)
-            print("Z é:", z)
-            print("A é:", a)
-            #print("N é: ", n)
-        StatusAPIUX_avaliador.graphicsView.addLegend(offset=-90)
-        StatusAPIUX_avaliador.graphicsView.addLegend()
-        StatusAPIUX_avaliador.graphicsView.addLegend()
-        pen = pg.mkPen(color=(255, 0, 0))
-        StatusAPIUX_avaliador.graphicsView.plot(
-            x, y, name="IGVj", pen=pen, symbol='+')
-
-        pen2 = pg.mkPen(color=(0, 255, 0))
-        StatusAPIUX_avaliador.graphicsView.plot(
-            x, z, name="ITPj", pen=pen2, symbol='+')
-
-        pen3 = pg.mkPen(color=(0, 0, 255))
-        StatusAPIUX_avaliador.graphicsView.plot(
-            x, a, name="ISIj", pen=pen3, symbol='+')
+            # lembrar que cada iteração(i) ele conta um a mais em todos campos
 
         banco.commit()
 
         StatusAPIUX_avaliador.label_4.setText("Evaluator:")
+        StatusAPIUX_avaliador.tableWidget.selectRow(0)
+
         StatusAPIUX_avaliador.show()
 
-        # Graph externo
-        # plt = pg.plot()
-        # plt.setLabel('bottom', 'Sequentially Generated Values')
-        # plt.setLabel('left', 'Randomly Generated Values')
-        # #teste = [1, 2, 3, 4, 5]
-        # for i in range(0, 4):
-        #     n = random.uniform(0, 4)
-        # plt.setXRange(0, 12)
-        # plt.setYRange(0, 4)
-        # plt.setTitle("Simple Line Graph")
-        # line = plt.plot(x, y)
-
-        # x = np.arange(1000)
-        # y = np.random.normal(size=(3, 1000))
-        # fim graph externo
-
-        # for i in range(3):
-        # StatusAPIUX_avaliador.graphicsView.plot(x, y)
-        #     #StatusAPIUX_avaliador.graphicsView.plot(x, y[i], pen=(i, 3))
-
-        StatusAPIUX_avaliador.graphicsView.showGrid(x=True, y=True)
-        #StatusAPIUX_avaliador.graphicsView.setXRange(0, 12, padding=0)
-        #StatusAPIUX_avaliador.graphicsView.setYRange(0, 4)
+        #StatusAPIUX_avaliador.graphicsView.setYRange(0, 4, padding=0)
 
        # StatusAPIUX_avaliador.graphicsView.plot(x, y, pen=(i, 3))
+
+
+def mostrar_graficos():
+    tela_graficos.graphicsView.showGrid(x=True, y=True)
+    tela_graficos.graphicsView.setXRange(0, 4, padding=0)
+
+    avaliadorusr = tela_login.lineEdit.text()
+    cursor = banco.cursor()
+
+    # # 17/05 comando_SQL = ("select avaliadorid from avaliadores where avaliadorusr=('%s')" % (avaliadorusr,))
+    comando_SQL = (
+        "select avaliador from avaliadores where avaliadorusr=('%s')" % (avaliadorusr,))  # busca nome real da pessoa atraves do usuario
+    cursor.execute(comando_SQL)
+
+    avaliador_lido = cursor.fetchall()  # pegou usuário do avaliador
+    # pegar o nome real da pessoa sem ser nome de usuario
+    avaliador_lido = avaliador_lido[0][0]
+    avaliador = avaliador_lido
+
+    # # para fazer a ordenação, sort, tanto na alimentação quanto no acesso fiz order pela chamada no banco e então populado
+    cursor = banco.cursor()
+
+    linha = StatusAPIUX_avaliador.tableWidget.currentRow()
+    print("Linha do mostrar graficos é o nº:", linha)
+
+    #provedor = StatusAPIUX_avaliador.tableWidget.item(linha, 0)
+    #provedor = [StatusAPIUX_avaliador.tableWidget.item(linha, 0).text()]
+    provedor = StatusAPIUX_avaliador.tableWidget.item(linha, 0).text()
+
+    print("O provedor selecionado para mostrar gráficos é:", provedor)
+
+    cursor.execute(
+        "SELECT * FROM avaliacao_csp where avaliador=('%s') and provedor=('%s')" % (avaliador, provedor))
+    dados_lidos = cursor.fetchall()
+    print("Avaliações no mostrar gráficos:", dados_lidos)
+    cursor.close()
+    cursor = banco.cursor()
+    contador = 0
+    s = 0
+
+    print("Avaliador do mostrar gráficos é:", avaliador)
+    print("Provedor do mostrar gráficos é:", provedor)
+    cursor = banco.cursor()
+    # cursor.execute = ("SELECT provedor,mes,ano,IGVj,ITPj,ISIj FROM avaliacao_csp where avaliador=('%s') and provedor=('%s') order by provedor,ano,mes" % (
+
+    cursor.execute(
+        "SELECT provedor,mes,ano,IGVj,ITPJ,ISIj FROM avaliacao_csp where avaliador=('%s') and provedor=('%s') order by provedor,ano,mes" % (avaliador, provedor))
+    dados_listados = cursor.fetchall()
+    print("Mostrar Gráficos os Dados listados que são apresentados na tabela:", dados_listados)
+
+    x = []
+    y = []
+    z = []
+    a = []
+
+    p = 0
+    for i in range(0, len(dados_listados)):
+
+        provedor = dados_listados[0][0]
+        mes = dados_listados[i][1]
+        ano = dados_listados[i][2]
+        IGVj = dados_listados[i][3]
+        ITPj = dados_listados[i][4]
+        ISIj = dados_listados[i][5]
+        print("i é", i)
+        print("provedor da tabela Mostrar Gráficos:", provedor)
+        print("mês da tabela Mostrar Gráficos:", mes)
+        print("ano da tabela Mostrar Gráficos:", ano)
+        print("IGVj da tabela Mostrar Gráficos:", IGVj)
+        print("ITPj da tabela Mostrar Gráficos:", ITPj)
+        print("ISIj da tabela Mostrar Gráficos:", ISIj)
+
+        # lembrar que cada iteração(i) ele conta um a mais em todos campos
+
+        xx = mes
+        yy = IGVj
+        zz = ITPj
+        aa = ISIj
+
+        x.append(xx)
+
+        y.append(yy)
+
+        z.append(zz)
+
+        a.append(aa)
+
+#
+
+        print("X Mostrar Gráficos é:", x)
+        print("Y Mostrar Gráficos é:", y)
+        print("Z Mostrar Gráficos é:", z)
+        print("A Mostrar Gráficos é:", a)
+
+        # para nao ficar aumentando as legendas toda vez do plot
+        #provedor = dados_listados[i][0]
+        tela_graficos.graphicsView.setTitle(provedor)
+        tela_graficos.graphicsView.setLabel(
+            'bottom', 'Month', units='m')
+        tela_graficos.graphicsView.setLabel(
+            'left', 'Indicators')
+        #mes = [1, 2, 3, 4]
+        #IGVj = [2.2, 3.1, 3.5, 2.1]
+
+        print("X é:", x)
+        print("Y é:", y)
+        print("Z é:", z)
+        print("A é:", a)
+
+
+#                 x = np.arange(1000)
+#                 y = np.random.normal(size=(3, 1000))
+
+        #print("N é: ", n)
+        # StatusAPIUX_avaliador.graphicsView.addLegend(offset=-90)
+        tela_graficos.graphicsView.addLegend(offset=90)
+        tela_graficos.graphicsView.addLegend()
+        tela_graficos.graphicsView.addLegend()
+        if contador == 0:
+            # months = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            #           'Jul', 'Ago', 'Sep', 'Out', 'Nov', 'Dec')
+
+            # StatusAPIUX_avaliador.graphicsView.items()
+
+            # else:
+            #     print("Mês não encontrado")
+            # if x == 1:
+            #     xx = "Jan"
+            # elif xx == 2:
+            #     xx = "Fev"
+            # elif xx == 3:
+            #     xx = "Mar"
+            # elif xx == 4:
+            #     xx = "April"
+            # elif xx == 5:
+            #     xx = "May"
+            # elif xx == 6:
+            #     xx = "Jun"
+            # elif xx == 7:
+            #     xx = "Jul"
+            # elif xx == 8:
+            #     xx = "Ago"
+            # elif xx == 9:
+            #     xx = "Sept"
+            # elif xx == 10:
+            #     xx = "Oct"
+            # elif xx == 11:
+            #     xx = "Nov"
+            # elif xx == 12:
+            #     xx = "Dec"
+            # else:
+            #     print("Mês não encontrado")
+            pen = pg.mkPen(color=(255, 0, 0))
+            tela_graficos.graphicsView.plot(
+                x, y, name="IGVj", pen=pen, symbol='+')
+
+            pen2 = pg.mkPen(color=(0, 255, 0))
+            tela_graficos.graphicsView.plot(
+                x, z, name="ITPj", pen=pen2, symbol='o')
+
+            pen3 = pg.mkPen(color=(0, 0, 255))
+            tela_graficos.graphicsView.plot(
+                x, a, name="ISIj", pen=pen3, symbol='x')
+
+        else:  # se não for zero, ele só plota sem precisar por legenda que já foi realizada na primeira iteracao do 0
+            pen = pg.mkPen(color=(255, 0, 0))
+            tela_graficos.graphicsView.plot(
+                x, y, pen=pen, symbol='+')
+
+            pen2 = pg.mkPen(color=(0, 255, 0))
+            tela_graficos.graphicsView.plot(
+                x, z, pen=pen2, symbol='o')
+
+            pen3 = pg.mkPen(color=(0, 0, 255))
+            tela_graficos.graphicsView.plot(
+                x, a, pen=pen3, symbol='x')
+        contador = contador+1
+    tela_graficos.show()
+
+    # # for i in range(3):
+    # #     StatusAPIUX_avaliador.graphicsView.plot(x, y)
+    # #     #StatusAPIUX_avaliador.graphicsView.plot(x, y[i], pen=(i, 3))
 
 
 def cadastro_avaliador():
@@ -4992,6 +5380,7 @@ if __name__ == "__main__":
     tela_cadastro_provedor = uic.loadUi("ui/tela_cadastro_provedor.ui")
     lista_avaliacao = uic.loadUi("ui/lista_avaliacao.ui")
     lista_avaliacao_avaliador = uic.loadUi("ui/lista_avaliacao_avaliador.ui")
+    tela_graficos = uic.loadUi("ui/tela_graficos.ui")
 
     StatusAPIUX_avaliador.botao_3.clicked.connect(detalhes_avaliador)
     tela_login.pushButton_2.clicked.connect(sair)
@@ -5029,6 +5418,7 @@ if __name__ == "__main__":
     StatusAPIUX.botao_5.clicked.connect(sair)
     StatusAPIUX_avaliador.botao_4.clicked.connect(voltar_statusapiux_avaliador)
     StatusAPIUX_avaliador.botao_5.clicked.connect(sair)
+    StatusAPIUX_avaliador.botao_8.clicked.connect(mostrar_graficos)
 
     tela_cadastro_provedor.pushButton_6.clicked.connect(
         voltar_cadastro_provedor)
