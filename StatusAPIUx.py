@@ -2274,6 +2274,10 @@ def mostrar_graficos():
     contador = 0
     s = 0
 
+    tela_graficos.graphicsView.clear()
+    tela_graficos.graphicsView.clear()
+    tela_graficos.graphicsView.clear()
+
     print("Avaliador do mostrar gráficos é:", avaliador)
     print("Provedor do mostrar gráficos é:", provedor)
     cursor = banco.cursor()
@@ -2349,9 +2353,12 @@ def mostrar_graficos():
 
         #print("N é: ", n)
         # StatusAPIUX_avaliador.graphicsView.addLegend(offset=-90)
-        tela_graficos.graphicsView.addLegend(offset=90)
+        tela_graficos.graphicsView.addLegend(offset=0)
         tela_graficos.graphicsView.addLegend()
         tela_graficos.graphicsView.addLegend()
+        tela_graficos.graphicsView.setXRange(1, 12)
+        tela_graficos.graphicsView.setYRange(0.001, 4.000)
+        tela_graficos.graphicsView.setLimits(xMin=0, xMax=12, yMin=0, yMax=4)
         if contador == 0:
             # months = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
             #           'Jul', 'Ago', 'Sep', 'Out', 'Nov', 'Dec')
@@ -5277,6 +5284,10 @@ def voltar_formulario_avaliacao():
     formulario_avaliacao.close()
 
 
+def voltar_mostrar_graficos():
+    tela_graficos.close()
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -5384,7 +5395,7 @@ if __name__ == "__main__":
 
     StatusAPIUX_avaliador.botao_3.clicked.connect(detalhes_avaliador)
     tela_login.pushButton_2.clicked.connect(sair)
-
+    tela_graficos.pushButton.clicked.connect(voltar_mostrar_graficos)
     StatusAPIUX_avaliador.botao_1.clicked.connect(funcao_iniciar)
 
     formulario_avaliacao.botao1.clicked.connect(nova_avaliacao)
